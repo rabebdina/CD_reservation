@@ -1,97 +1,21 @@
 pipeline {
-
-    agent any
-
-    tools {
-
-        
-
-        maven "Maven"
-
-    }
-    
-    environment {
-        
-    registry = "dinaabid/cd:Demo"
-    
+  environment {
+    registry = "dinaabid/cd"
     registryCredential = 'dockerhub'
-    
-    dockerImage = ''
-    
+  }
+ agent any
+  stages {
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/rabebdina/CD_reservation.git'
+      }
     }
-    stages {
-        
-        stage("clone code") {
-
-            steps {
-
-                script {
-
-                    // Let's clone the source
-
-                    git 'https://github.com/rabebdina/CD_reservation.git';
-
-                }
-
-            }
-
+    stage('Building image') {
+      steps{
+        script {
+          docker.build registry + ":$BUILD_NUMBER"
         }
-
-        stage("clean") {
-
-            steps {
-
-                script {
-
-                    // Let's clone the source
-
-                    sh "mvn clean"
-
-                }
-
-            }
-        }
-        
-        stage("mvn build package") {
-
-            steps {
-
-                script {
-
-                    
-
-                    sh "mvn -B package -DskipTests=true"
-
-                }
-
-            }
-
-        }
-        
-        stage('Building image') {
-            
-            steps{
-        
-                script {
-                    
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                
-                    
-                }
-            }
-        }
-        
-        stage('Deploy Image') {
-      
-            steps{
-        
-                script {
-          
-                    docker.withRegistry( '', registryCredential ) {
-                    dockerImage.push()
-                    }
-                }
-            }
-        }
+      }
     }
+  }
 }
