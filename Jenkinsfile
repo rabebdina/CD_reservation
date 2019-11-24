@@ -4,7 +4,7 @@ pipeline {
 
     tools {
 
-        // Note: this should match with the tool name configured in your jenkins instance (JENKINS_URL/configureTools/)
+        
 
         maven "Maven"
 
@@ -12,7 +12,7 @@ pipeline {
     
     environment {
         
-    registry = "sunnychams/docker-spring"
+    registry = "dinaabid/cd:Demo"
     
     registryCredential = 'dockerhub'
     
@@ -29,7 +29,7 @@ pipeline {
 
                     // Let's clone the source
 
-                    git 'https://github.com/Chams91/cd-docker-spring-jenkins.git';
+                    git 'https://github.com/rabebdina/CD_reservation.git';
 
                 }
 
@@ -58,9 +58,7 @@ pipeline {
 
                 script {
 
-                    // If you are using Windows then you should use "bat" step
-
-                    // Since unit testing is out of the scope we skip them
+                    
 
                     sh "mvn -B package -DskipTests=true"
 
