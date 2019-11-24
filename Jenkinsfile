@@ -4,13 +4,13 @@ pipeline {
     stages {
         stage('clean') {
             steps {
-	    echo 'clean..'
+	    sh "mvn clean"
 	}  
 	}
         stage('package') {
             steps {
 	   
-                echo 'package..'
+                sh "mvn -B package -DskipTests=true"
             }
         }
         stage('create docker image') {
